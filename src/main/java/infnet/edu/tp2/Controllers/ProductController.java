@@ -18,26 +18,34 @@ import infnet.edu.tp2.Repositories.ProductRepository;
 @RestController
 public class ProductController {
     
+
+    private ProductRepository _product;
     
-	private ProductRepository _product;
+    private static final String IdPathVariable = "id";
+    private static final String Base = "api/product";
+    private static final String GetEndpoint = Base + "{id}";
+    private static final String GetAllEndpoint = Base;
+    private static final String CreateEndpoint =  Base;
+    private static final String UpdateEndpoint = Base + "update";
+    private static final String DeleteEndpoint = Base + "{id}";
 
     public ProductController(ProductRepository product) {
         _product = product;
     }
 	
-    @GetMapping("api/product/{id}")
-    public Product GetProdcts(@PathVariable("id") int id)
+    @GetMapping(GetEndpoint)
+    public Product GetProdcts(@PathVariable(IdPathVariable) int id)
     {
         return _product.Get((id));
     }
 
-    @GetMapping("api/product")
+    @GetMapping(GetAllEndpoint)
     public List<Product> GetProdcts()
     {
         return _product.GetAll();
     }
 
-    @PostMapping("api/product")
+    @PostMapping(CreateEndpoint)
     public Product CreateProduct(@RequestBody Product product)
     {
         try {
@@ -51,7 +59,7 @@ public class ProductController {
         return new Product();
     }
 
-    @PutMapping("api/product/update")
+    @PutMapping(UpdateEndpoint)
     public Product UpdateProduct(@RequestBody Product product)
     {
         try {
@@ -65,9 +73,9 @@ public class ProductController {
         return new Product();
     }
 
-    @DeleteMapping("api/product/{id}")
+    @DeleteMapping(DeleteEndpoint)
     @ResponseStatus(code = HttpStatus.OK, reason = "DELETED")
-    public void DeleteProduct(@PathVariable("id") int id)
+    public void DeleteProduct(@PathVariable(IdPathVariable) int id)
     {
         _product.Delete(id);
     }
